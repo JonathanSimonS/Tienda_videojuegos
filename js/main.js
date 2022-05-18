@@ -38,26 +38,41 @@ function init() {
 
     var divCesta = document.getElementById("pagina-cesta");
     if (divCesta!=null) {
-        crearCestaPagina(divCesta);
+        crearCestaPagina();
     }
 }
-function crearCestaPagina(divCesta) {
-    
+function crearCestaPagina() {
+    var divCesta = document.getElementById("pagina-cesta");
+
     var cestaActual=localStorage.getItem('cesta');
     cestaActual==null ? cestaActual=[] : cestaActual=JSON.parse(cestaActual);
     
-    if (cestaActual.length>=1) {
-        var botonPedido= document.getElementById("btn-pedido");
-        botonPedido.classList.remove("ocultar");
-
-        var cestaVacia= document.getElementById("cesta-vacia");
-        cestaVacia.classList.add("ocultar");
-    }
+    //2. Elimino el contenido actual de dicha capa
+    while(divCesta.firstElementChild) divCesta.removeChild(divCesta.firstElementChild);
     
     for (let i = 0; i < cestaActual.length; i++) {
         var nodo=nuevoElementoCesta(cestaActual[i].img,cestaActual[i].nombre,cestaActual[i].precio);
         divCesta.insertBefore(nodo, divCesta.firstElementChild);
     }
+
+    // oculto o muestro el botón de la cesta de la compra y el div de información de cesta vacía
+    if (cestaActual.length>=1) {
+        var botonPedido= document.getElementById("btn-pedido");
+        botonPedido.classList.remove("ocultar");
+        var cestaVacia= document.getElementById("cesta-vacia");
+        cestaVacia.classList.add("ocultar");
+    } else {
+        var botonPedido= document.getElementById("btn-pedido");
+        botonPedido.classList.add("ocultar");
+        var cestaVacia= document.getElementById("cesta-vacia");
+        cestaVacia.classList.remove("ocultar");
+    }
+
+    // añado evento para los nuevos botones
+    var botonesBorrarArticulo = document.querySelectorAll(".borrarArticulo");
+    botonesBorrarArticulo.forEach(element => {
+        element.addEventListener("click",borrarArticulo);
+    });
 
 }
 
@@ -125,6 +140,24 @@ function actualizarDesplegable(cestaActual){
 }
 function borrarArticulo() {
     
+    // obtengo información que necesito
+    var nombre = this.parentNode.firstElementChild.textContent;
+
+    // obtengo información de la cesta
+    var cestaActual=localStorage.getItem('cesta');
+    cestaActual=JSON.parse(cestaActual);
+
+    // devuelvo un nuevo array, añado solo los elementos que no contengan el nombre
+    cestaActual = cestaActual.filter((element) => element.nombre !== nombre);
+    
+    // actualizo datos
+    localStorage.setItem('cesta', JSON.stringify(cestaActual));
+
+    // actualizo la página de la cesta
+    crearCestaPagina();
+    
+    // cambiar alert por modal
+    alert("Producto borrado de la cesta.");
 }
 function borrarCesta() {
     
