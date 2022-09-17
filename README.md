@@ -1,5 +1,7 @@
 # Diseno_Web - Práctica final del módulo Diseño de Interfaces Web
 
+Página desplegada -> https://tienda-videojuegos-jss.netlify.app/
+
 ¿Qué te pedimos que hagas?
 
 Actividad 1. Completa todas las páginas de la Web de la desarrolladora y comprueba/corrige su comportamiento para que sea adecuado y responsive. Se podrá integrar jQuery / Bootstrap parcial o totalmente en las páginas. 
